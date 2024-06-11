@@ -11,6 +11,7 @@ import Email from 'src/content/dashboards/Email';
 import Subjects from 'src/content/dashboards/Subjects';
 import Students from 'src/content/dashboards/Students';
 import Classes from './content/dashboards/Classes';
+import MarksList from 'src/content/dashboards/MarksList/MarksList';
 
 const Loader = (Component) => (props) =>
   (
@@ -24,7 +25,7 @@ const Loader = (Component) => (props) =>
 const Overview = Loader(lazy(() => import('./content/overview/Login')));
 // Dashboards
 
-const companies = Loader(
+const examCreation = Loader(
   lazy(() => import('src/content/dashboards/Exam_Creation'))
 );
 
@@ -41,16 +42,12 @@ const students = Loader(lazy(() => import('src/content/dashboards/Students')));
 const Class_Room_List = Loader(
   lazy(() => import('src/content/dashboards/Class_Room_List'))
 );
-const email = Loader(lazy(() => import('src/content/dashboards/Email')));
+const marksList = Loader(
+  lazy(() => import('src/content/dashboards/MarksList/MarksList'))
+);
 
 const Transactions = Loader(
   lazy(() => import('src/content/applications/Transactions'))
-);
-const UserProfile = Loader(
-  lazy(() => import('src/content/applications/Users/profile'))
-);
-const UserSettings = Loader(
-  lazy(() => import('src/content/applications/Users/settings'))
 );
 
 // Status
@@ -145,8 +142,13 @@ const routes = [
         element: <Classes />
       },
       {
-        path: 'email',
-        element: <Email />
+        path: 'marksList',
+        element: (
+          <MarksList
+            subjectsFromAnotherComponent={undefined}
+            classesFromAnotherComponent={undefined}
+          />
+        )
       }
     ]
   },
@@ -169,14 +171,6 @@ const routes = [
           {
             path: '',
             element: <Navigate to="details" replace />
-          },
-          {
-            path: 'details',
-            element: <UserProfile />
-          },
-          {
-            path: 'settings',
-            element: <UserSettings />
           }
         ]
       }

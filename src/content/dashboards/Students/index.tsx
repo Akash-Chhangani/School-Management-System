@@ -19,26 +19,16 @@ import {
   MenuItem,
   Paper,
   Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
   TextField,
   Typography
 } from '@mui/material';
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { Helmet } from 'react-helmet-async';
 import DataNotFound from 'src/content/pages/Status/DataNotFound';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import Footer from 'src/components/Footer';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import StudentHeader from './StudentHeader';
 import RecentOrders from 'src/content/applications/Transactions/RecentOrders';
-import BulkActions from 'src/content/applications/Transactions/BulkActions';
 
 const Students = () => {
   const [open, setOpen] = useState(false);
@@ -206,34 +196,7 @@ const Students = () => {
       </Helmet>
 
       <PageTitleWrapper>
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item>
-            <Typography variant="h3" component="h3" gutterBottom>
-              Students
-            </Typography>
-            <Typography variant="subtitle2">
-              {user.name}, These are the list of all the Students in our School
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ margin: '0.6rem' }}
-              onClick={handleClickOpen}
-            >
-              <AddTwoToneIcon
-                sx={{
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  marginRight: '5px'
-                }}
-              />
-              Create New Subject
-            </Button>
-          </Grid>
-        </Grid>
+        <StudentHeader data={handleClickOpen} />
       </PageTitleWrapper>
 
       <Dialog
@@ -467,6 +430,20 @@ const Students = () => {
           <DataNotFound />
         )}
       </Container>
+
+      {/* <Container maxWidth="lg">
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Grid item xs={12}>
+            <RecentOrders />
+          </Grid>
+        </Grid>
+      </Container> */}
 
       <Footer />
     </>

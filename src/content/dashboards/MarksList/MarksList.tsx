@@ -17,19 +17,26 @@ import {
   DialogContentText,
   DialogActions,
   Container,
-  IconButton
+  IconButton,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import BusinessIcon from '@mui/icons-material/Business';
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Helmet } from 'react-helmet-async';
 import Footer from 'src/components/Footer';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DataNotFound from 'src/content/pages/Status/DataNotFound';
-import ClassRoomHeader from './ClassRoomHeader';
+import MarkListHeader from './MarkListHeader';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 
-const Class_Room_List = ({
+const index = ({
   subjectsFromAnotherComponent,
   classesFromAnotherComponent
 }) => {
@@ -38,49 +45,62 @@ const Class_Room_List = ({
   const [submitClassRoomData, setSubmitClassRoomData] = useState([]);
   const [editingClassRoomData, setEditingClassRoomData] = useState(null);
   const [data, setData] = useState({
+    exam: [],
     subjects: [],
     classes: [],
-    academicYear: '',
-    classTeacher: ''
+    academicYear: ''
   });
   const [subjects, setSubjects] = useState(subjectsFromAnotherComponent || []);
+  const [titleOfExam, setTitleOfExam] = useState(
+    subjectsFromAnotherComponent || []
+  );
   const [classes, setClasses] = useState(classesFromAnotherComponent || []);
-  const [academicYear, setAcademicYear] = useState('');
 
   useEffect(() => {
-    fetchClassRoomData();
+    fetchCompanyData();
     if (!subjectsFromAnotherComponent) {
       fetchSubjectData();
     }
-  }, [updateList, subjectsFromAnotherComponent]);
-
-  useEffect(() => {
-    if (academicYear) {
-      fetchClassData(academicYear);
+    if (!subjectsFromAnotherComponent) {
+      fetchExamData();
     }
-  }, [academicYear]);
+    if (!classesFromAnotherComponent) {
+      fetchClassData();
+    }
+  }, [updateList, subjectsFromAnotherComponent, classesFromAnotherComponent]);
 
-  const fetchClassRoomData = () => {
+  const fetchCompanyData = () => {
     const storedData = JSON.parse(localStorage.getItem('Class')) || [];
     setSubmitClassRoomData(storedData);
   };
 
+  //Exam Data Fetch
+  const fetchExamData = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/exam');
+      const data = await response.json();
+      setTitleOfExam(data);
+    } catch (error) {
+      console.error('Error fetching Exam data:', error);
+    }
+  };
+  //Subject Data Fetching
   const fetchSubjectData = async () => {
     try {
       const response = await fetch('http://localhost:4000/subject');
       const data = await response.json();
+      console.log(data);
       setSubjects(data);
     } catch (error) {
       console.error('Error fetching Subject data:', error);
     }
   };
-
-  const fetchClassData = async (academicYear) => {
+  //Class Data Fetching
+  const fetchClassData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/classes?year=${academicYear}`
-      );
+      const response = await fetch('http://localhost:4000/classes');
       const data = await response.json();
+      console.log(data);
       setClasses(data);
     } catch (error) {
       console.error('Error fetching Classes data:', error);
@@ -127,6 +147,13 @@ const Class_Room_List = ({
     }));
   };
 
+  const handleExamChange = (event, value) => {
+    setData((prevData) => ({
+      ...prevData,
+      subjects: value.map((titleOfExam) => titleOfExam.titleOfExam)
+    }));
+  };
+
   const handleSubjectChange = (event, value) => {
     setData((prevData) => ({
       ...prevData,
@@ -141,23 +168,14 @@ const Class_Room_List = ({
     }));
   };
 
-  const handleAcademicYearChange = (event, value) => {
-    setAcademicYear(value);
-    setData((prevData) => ({
-      ...prevData,
-      academicYear: value,
-      classes: [] // Clear classes when academic year changes
-    }));
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
     setEditingClassRoomData(null);
     setData({
+      exam: [],
       subjects: [],
       classes: [],
-      academicYear: '',
-      classTeacher: ''
+      academicYear: ''
     });
   };
 
@@ -172,11 +190,11 @@ const Class_Room_List = ({
   return (
     <>
       <Helmet>
-        <title>Class Room List</title>
+        <title>Mark List</title>
       </Helmet>
 
       <PageTitleWrapper>
-        <ClassRoomHeader onClick={handleClickOpen} />
+        <MarkListHeader onClick={handleClickOpen} />
       </PageTitleWrapper>
 
       <Dialog
@@ -196,7 +214,7 @@ const Class_Room_List = ({
               fontSize: '24px'
             }}
           >
-            <BusinessIcon
+            <ChecklistIcon
               sx={{
                 fontSize: '2rem',
                 fontWeight: 'bold',
@@ -204,7 +222,7 @@ const Class_Room_List = ({
                 marginRight: '5px'
               }}
             />
-            {editingClassRoomData ? 'Edit Class Room' : 'Create Class Room'}
+            {editingClassRoomData ? 'Edit Mark List' : 'Create Mark List'}
           </Typography>
         </DialogTitle>
 
@@ -221,17 +239,39 @@ const Class_Room_List = ({
           <DialogContentText id="alert-dialog-description">
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12}>
+                <Box sx={{ minWidth: 120, marginTop: 1 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Academic Year</InputLabel>
+                    <Select
+                      id="academicYear"
+                      name="academicYear"
+                      value={data.academicYear}
+                      label="Academic Year"
+                      onChange={handleInputChange}
+                    >
+                      <MenuItem value={'2020-2021'}>2020-2021</MenuItem>
+                      <MenuItem value={'2021-2022'}>2021-2022</MenuItem>
+                      <MenuItem value={'2022-2023'}>2022-2023</MenuItem>
+                      <MenuItem value={'2023-2024'}>2023-2024</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
                 <Autocomplete
                   sx={{ marginTop: 1 }}
-                  id="academicYear"
-                  options={['2021-2022', '2022-2023', '2023-2024']} // Example options
-                  getOptionLabel={(option) => option}
-                  value={academicYear}
-                  onChange={handleAcademicYearChange}
+                  id="titleOfExam"
+                  multiple
+                  options={titleOfExam}
+                  getOptionLabel={(option) => option.titleOfExam}
+                  value={titleOfExam.filter((titleOfExam) =>
+                    data.exam.includes(titleOfExam.titleOfExam)
+                  )}
+                  onChange={handleExamChange}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Academic Year"
+                      label="Exam Title"
                       variant="outlined"
                       required
                       fullWidth
@@ -240,7 +280,6 @@ const Class_Room_List = ({
                 />
               </Grid>
 
-              {/* Classes Data */}
               <Grid item xs={12}>
                 <Autocomplete
                   sx={{ marginTop: 1 }}
@@ -261,41 +300,6 @@ const Class_Room_List = ({
                       fullWidth
                     />
                   )}
-                />
-              </Grid>
-
-              {/* Subjects Data */}
-              <Grid item xs={12}>
-                <Autocomplete
-                  id="subjects"
-                  multiple
-                  options={subjects}
-                  getOptionLabel={(option) => option.subjectName}
-                  value={subjects.filter((subject) =>
-                    data.subjects.includes(subject.subjectName)
-                  )}
-                  onChange={handleSubjectChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Subjects"
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="classTeacher"
-                  name="classTeacher"
-                  label="Class Teacher Assign"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  value={data.classTeacher}
-                  onChange={handleInputChange}
                 />
               </Grid>
             </Grid>
@@ -328,72 +332,9 @@ const Class_Room_List = ({
         </DialogActions>
       </Dialog>
 
-      <Container maxWidth="lg">
-        {submitClassRoomData.length > 0 ? (
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="stretch"
-            spacing={3}
-          >
-            <Grid item xs={12}>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">Sr No.</TableCell>
-                      <TableCell align="center">Class</TableCell>
-                      <TableCell align="center">Assign Subjects</TableCell>
-                      <TableCell align="center">Class Teacher</TableCell>
-                      <TableCell align="center">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-
-                  <TableBody>
-                    {submitClassRoomData.map((data, index) => (
-                      <TableRow key={index}>
-                        <TableCell align="center">{index + 1}</TableCell>
-
-                        <TableCell align="center">{data.classes}</TableCell>
-                        <TableCell align="center">
-                          {data.subjects.join(', ')}
-                        </TableCell>
-                        <TableCell align="center">
-                          {data.classTeacher}
-                        </TableCell>
-
-                        <TableCell align="center">
-                          <IconButton
-                            aria-label="delete"
-                            color="error"
-                            onClick={() => handleDelete(data.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-
-                          <IconButton
-                            color="success"
-                            onClick={() => handleEditTable(data)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
-        ) : (
-          <DataNotFound />
-        )}
-      </Container>
-
       <Footer />
     </>
   );
 };
 
-export default Class_Room_List;
+export default index;

@@ -14,7 +14,8 @@ function ApplicationsTransactions() {
       </Helmet>
 
       <PageTitleWrapper>
-        <PageHeader />
+        {/* <PageHeader onClick={handleClickOpen} /> This is props  */}
+        <PageHeader onClick={undefined} />
       </PageTitleWrapper>
 
       <Container maxWidth="lg">

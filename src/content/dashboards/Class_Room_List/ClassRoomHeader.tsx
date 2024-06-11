@@ -2,7 +2,7 @@ import { Typography, Button, Grid } from '@mui/material';
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 
-function PageHeader({ onClick }) {
+function MarkListHeader(props) {
   const user = {
     name: 'Akash Chhangani',
     avatar: '/static/images/avatars/1.jpg'
@@ -11,10 +11,10 @@ function PageHeader({ onClick }) {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Transactions
+          Class Room Records
         </Typography>
         <Typography variant="subtitle2">
-          {user.name}, these are your recent transactions
+          {user.name}, these are the list of Class Room in school.
         </Typography>
       </Grid>
       <Grid item>
@@ -22,7 +22,7 @@ function PageHeader({ onClick }) {
           sx={{ mt: { xs: 2, md: 0 } }}
           variant="contained"
           color="success"
-          onClick={onClick}
+          onClick={props.onClick}
         >
           <AddTwoToneIcon
             sx={{
@@ -32,11 +32,11 @@ function PageHeader({ onClick }) {
               marginRight: '5px'
             }}
           />
-          Create transaction
+          Create Class Room
         </Button>
       </Grid>
     </Grid>
   );
 }
 
-export default PageHeader;
+export default MarkListHeader;

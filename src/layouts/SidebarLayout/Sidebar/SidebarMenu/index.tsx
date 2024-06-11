@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { SidebarContext } from 'src/contexts/SidebarContext';
-
+import ChecklistIcon from '@mui/icons-material/Checklist';
 import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone';
 import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
@@ -237,6 +237,17 @@ function SidebarMenu() {
                   startIcon={<LocationOnIcon />}
                 >
                   Class Room List
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/dashboards/MarksList"
+                  startIcon={<ChecklistIcon />}
+                >
+                  Mark List
                 </Button>
               </ListItem>
             </List>

@@ -36,6 +36,7 @@ const Office = () => {
   const [submitClassData, setSubmitClassData] = useState([]);
   const [editingClassData, setEditingClassData] = useState(null);
   const [data, setData] = useState({
+    academicYear: '',
     className: '',
     capacity: '',
     boys: '',
@@ -61,6 +62,7 @@ const Office = () => {
   // Function to handle opening dialog for editing
   const handleEditCard = (
     data: SetStateAction<{
+      academicYear: string;
       className: string;
       capacity: string;
       boys: string;
@@ -174,6 +176,7 @@ const Office = () => {
     setOpen(true);
     setEditingClassData(null);
     setData({
+      academicYear: '',
       className: '',
       capacity: '',
       boys: '',
@@ -259,6 +262,25 @@ const Office = () => {
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12}>
                 <Box sx={{ minWidth: 120, marginTop: 1 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Academic Year</InputLabel>
+                    <Select
+                      id="academicYear"
+                      name="academicYear"
+                      value={data.academicYear}
+                      label="Academic Year"
+                      onChange={handleInputChange}
+                    >
+                      <MenuItem value={'2020-2021'}>2020-2021</MenuItem>
+                      <MenuItem value={'2021-2022'}>2021-2022</MenuItem>
+                      <MenuItem value={'2022-2023'}>2022-2023</MenuItem>
+                      <MenuItem value={'2023-2024'}>2023-2024</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel>Class</InputLabel>
                     <Select
@@ -412,6 +434,10 @@ const Office = () => {
                       <b>Description: </b>
                       {data.description}
                     </Typography>
+                    <Typography variant="body2" color="black">
+                      <b>Class Teacher Assign to {data.className} is : </b>
+                      {data.classTeacherAssign}
+                    </Typography>
                   </CardContent>
 
                   <CardActions
@@ -422,8 +448,8 @@ const Office = () => {
                     }}
                   >
                     <Typography variant="body2" color="black">
-                      <b>Class Teacher Assign to {data.className} is : </b>
-                      {data.classTeacherAssign}
+                      <b>Academic Year : </b>
+                      {data.academicYear}
                     </Typography>
                     <IconButton
                       onClick={() => handleDelete(data._id)}

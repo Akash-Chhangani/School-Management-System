@@ -18,8 +18,6 @@ import {
   Typography
 } from '@mui/material';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { Helmet } from 'react-helmet-async';
 import DataNotFound from 'src/content/pages/Status/DataNotFound';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
@@ -39,7 +37,6 @@ const Subjects = () => {
     subjectDescription: ''
   });
 
-  // Load data from local storage when component mounts
   useEffect(() => {
     fetchSubjectData();
   }, [updateList]);
