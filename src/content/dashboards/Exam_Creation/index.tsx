@@ -25,13 +25,13 @@ import {
   FormControl
 } from '@mui/material';
 import BusinessIcon from '@mui/icons-material/Business';
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Helmet } from 'react-helmet-async';
 import Footer from 'src/components/Footer';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import DataNotFound from 'src/content/pages/Status/DataNotFound';
+import ExamHeader from './ExamHeader';
 
 const Exam_Creation = () => {
   const [open, setOpen] = useState(false);
@@ -113,8 +113,6 @@ const Exam_Creation = () => {
   };
 
   const handleDelete = async (id: number) => {
-    console.log('id ', id);
-
     try {
       const response = await fetch(`http://localhost:4000/exam/${id}`, {
         method: 'DELETE'
@@ -205,34 +203,7 @@ const Exam_Creation = () => {
       </Helmet>
 
       <PageTitleWrapper>
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item>
-            <Typography variant="h3" component="h3" gutterBottom>
-              Exam Creation
-            </Typography>
-            <Typography variant="subtitle2">
-              {user.name}, these are the list of exams.
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ margin: '0.6rem' }}
-              onClick={handleClickOpen}
-            >
-              <AddTwoToneIcon
-                sx={{
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  marginRight: '5px'
-                }}
-              />{' '}
-              Create Exam
-            </Button>
-          </Grid>
-        </Grid>
+        <ExamHeader onClick={handleClickOpen} />
       </PageTitleWrapper>
 
       <Container>
